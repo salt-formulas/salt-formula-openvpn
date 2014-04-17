@@ -1,9 +1,6 @@
-{%- if pillar.openvpn.enabled %}
+{%- if pillar.openvpn.client.enabled %}
 
-include:
-- apt
-
-openvpn_packages:
+openvpn_client_packages:
   pkg.installed:
   - names:
     - openvpn
