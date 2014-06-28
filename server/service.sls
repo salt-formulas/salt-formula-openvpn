@@ -4,6 +4,10 @@
 include:
 - openvpn.common
 
+net.ipv4.ip_forward:
+  sysctl.present:
+    - value: 1
+
 /etc/openvpn/server.conf:
   file.managed:
     - source: salt://openvpn/files/server.conf
