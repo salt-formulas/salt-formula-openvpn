@@ -18,9 +18,9 @@ net.ipv4.ip_forward:
     - watch_in:
       - service: openvpn_service
 
-/etc/openvpn/ipp.txt:
+/etc/default/openvpn:
   file.managed:
-    - source: salt://openvpn/files/ipp.txt
+    - source: salt://openvpn/files/default
     - template: jinja
     - mode: 600
     - require:

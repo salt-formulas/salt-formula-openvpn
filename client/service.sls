@@ -23,18 +23,32 @@ include:
   - source: salt://pki/{{ tunnel.ssl.authority }}/certs/{{ tunnel.ssl.certificate }}.cert.pem
   - require:
     - file: openvpn_ssl_dir
+  - require_in:
+    - service: openvpn_service
 
 /etc/openvpn/ssl/{{ tunnel.ssl.authority }}_{{ tunnel.ssl.certificate }}.key:
   file.managed:
   - source: salt://pki/{{ tunnel.ssl.authority }}/certs/{{ tunnel.ssl.certificate }}.key.pem
   - require:
     - file: openvpn_ssl_dir
+  - require_in:
+    - service: openvpn_service
 
 /etc/openvpn/ssl/{{ tunnel.ssl.authority }}.crt:
   file.managed:
   - source: salt://pki/{{ tunnel.ssl.authority }}/{{ tunnel.ssl.authority }}-chain.cert.pem
   - require:
     - file: openvpn_ssl_dir
+  - require_in:
+    - service: openvpn_service
+
+/etc/openvpn/ipp.txt:
+  file.managed:
+    - source: salt://openvpn/files/ipp.txt
+    - template: jinja
+    - mode: 600
+    - require:
+      - pkg: openvpn_packages
 
 {%- endfor %}
 
