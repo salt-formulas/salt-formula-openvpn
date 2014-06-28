@@ -10,6 +10,7 @@ include:
   file.managed:
     - source: salt://openvpn/files/client.conf
     - template: jinja
+    - mode: 600
     - default:
       tunnel_name: '{{ tunnel_name }}'
     - require:

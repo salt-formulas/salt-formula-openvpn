@@ -19,6 +19,25 @@ Simple OpenVPN server
           port: 1194
           protocol: tcp
 
+OpenVPN server with private subnet with DHCP and predefined clients
+
+    openvpn:
+      server:
+        ...
+        interface:
+          type: subnet
+          network: 10.0.8.0
+          netmask: 255.255.255.0
+          dhcp_pool:
+            start: 10.0.8.100
+            end: 10.0.8.199
+          clients:
+          - host: client1.domain.com
+            address: 10.0.8.12
+          - host: client2.domain.com
+            address: 10.0.8.13
+
+
 Simple OpenVPN client with multiple servers
 
     openvpn:

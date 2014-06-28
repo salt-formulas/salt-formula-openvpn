@@ -8,10 +8,19 @@ include:
   file.managed:
     - source: salt://openvpn/files/server.conf
     - template: jinja
+    - mode: 600
     - require:
       - pkg: openvpn_packages
     - watch_in:
       - service: openvpn_service
+
+/etc/openvpn/ipp.txt:
+  file.managed:
+    - source: salt://openvpn/files/ipp.txt
+    - template: jinja
+    - mode: 600
+    - require:
+      - pkg: openvpn_packages
 
 /etc/openvpn/ssl/server.crt:
   file.managed:
