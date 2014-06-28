@@ -10,11 +10,14 @@ Simple OpenVPN server
     openvpn:
       server:
         enabled: true
+        device: tup
+        ssl:
+          authority: Domain_Service_CA
+          certificate: server.domain.com
         bind:
           address: 0.0.0.0
           port: 1194
           protocol: tcp
-        device: tup
 
 Simple OpenVPN client with multiple servers
 
@@ -31,6 +34,9 @@ Simple OpenVPN client with multiple servers
               port: 1194
             protocol: tcp
             device: tup
+            ssl:
+              authority: Domain_Service_CA
+              certificate: client.domain.com
 
 ## Read more
 
