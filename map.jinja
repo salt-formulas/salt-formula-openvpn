@@ -1,0 +1,28 @@
+{% set common = salt['grains.filter_by']({
+    'Debian': {
+        'pkgs': ['openvpn'],
+        'config_dir': '/etc/openvpn',
+    },
+    'RedHat': {
+        'pkgs': ['openvpn'],
+        'config_dir': '/etc/openvpn',
+    },
+}, merge=salt['pillar.get']('openvpn')) %}
+
+{% set client = salt['grains.filter_by']({
+    'Debian': {
+        'service_enabled': True,
+    },
+    'RedHat': {
+        'service_enabled': True,
+    },
+}, merge=salt['pillar.get']('openvpn:client')) %}
+
+{% set server = salt['grains.filter_by']({
+    'Debian': {
+        'service_enabled': True,
+    },
+    'RedHat': {
+        'service_enabled': True,
+    },
+}, merge=salt['pillar.get']('openvpn:server')) %}
