@@ -13,21 +13,29 @@ include:
     - watch_in:
       - service: openvpn_service
 
-/etc/opevpn/ssl/server.crt:
+/etc/openvpn/ssl/server.crt:
   file.managed:
   - source: salt://pki/{{ server.ssl.authority }}/certs/{{ server.ssl.certificate }}.cert.pem
   - require:
     - file: openvpn_ssl_dir
 
-/etc/opevpn/ssl/server.key:
+/etc/openvpn/ssl/server.key:
   file.managed:
   - source: salt://pki/{{ server.ssl.authority }}/certs/{{ server.ssl.certificate }}.key.pem
   - require:
     - file: openvpn_ssl_dir
 
-/etc/ssl/certs/ca-chain.crt:
+/etc/openvpn/ssl/ca.crt:
   file.managed:
   - source: salt://pki/{{ server.ssl.authority }}/{{ server.ssl.authority }}-chain.cert.pem
+  - require:
+    - file: openvpn_ssl_dir
+
+dh_key_install:
+  cmd.run:
+  - name: openssl dhparam -out dh4096.pem 4096
+  - cwd: /etc/openvpn/ssl
+  - unless: test -e /etc/openvpn/ssl/dh4096.pem
   - require:
     - file: openvpn_ssl_dir
 

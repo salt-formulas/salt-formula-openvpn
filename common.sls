@@ -11,5 +11,6 @@ openvpn_ssl_dir:
     - pkg: openvpn_packages
 
 openvpn_service:
-  service.runnig:
+  service.running:
   - name: {{ common.service }}
+  - enable: true
