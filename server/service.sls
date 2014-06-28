@@ -33,9 +33,9 @@ include:
 
 dh_key_install:
   cmd.run:
-  - name: openssl dhparam -out dh4096.pem 4096
+  - name: openssl dhparam -out dh2048.pem 2048
   - cwd: /etc/openvpn/ssl
-  - unless: test -e /etc/openvpn/ssl/dh4096.pem
+  - unless: test -e /etc/openvpn/ssl/dh2048.pem
   - require:
     - file: openvpn_ssl_dir
 
