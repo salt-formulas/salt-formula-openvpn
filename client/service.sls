@@ -4,6 +4,16 @@
 include:
 - openvpn.common
 
+/etc/default/openvpn:
+  file.managed:
+  - source: salt://openvpn/files/default
+  - template: jinja
+  - mode: 600
+  - require:
+    - pkg: openvpn_packages
+  - watch_in:
+    - service: openvpn_service
+
 {%- for tunnel_name, tunnel in client.tunnel.iteritems() %}
 
 /etc/openvpn/{{ tunnel_name }}.conf:
@@ -41,14 +51,6 @@ include:
     - file: openvpn_ssl_dir
   - require_in:
     - service: openvpn_service
-
-/etc/openvpn/ipp.txt:
-  file.managed:
-    - source: salt://openvpn/files/ipp.txt
-    - template: jinja
-    - mode: 600
-    - require:
-      - pkg: openvpn_packages
 
 {%- endfor %}
 

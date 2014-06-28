@@ -1,3 +1,4 @@
+{%- from "openvpn/map.jinja" import client with context %}
 # This is the configuration file for /etc/init.d/openvpn
 
 #
@@ -9,7 +10,7 @@
 #
 #AUTOSTART="all"
 #AUTOSTART="none"
-AUTOSTART="{%- for tunnel_name, tunnel in client.tunnel.iteritems() %}{{ tunnel_name }}{% if not loop.last %} {% endif %}{% endif %}"
+AUTOSTART="{%- for tunnel_name, tunnel in client.tunnel.iteritems() %}{% if tunnel.autostart %}{{ tunnel_name }}{% if not loop.last %} {% endif %}{% endif %}{% endfor %}"
 #
 # Refresh interval (in seconds) of default status files
 # located in /var/run/openvpn.$NAME.status

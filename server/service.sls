@@ -6,43 +6,51 @@ include:
 
 net.ipv4.ip_forward:
   sysctl.present:
-    - value: 1
+  - value: 1
 
 /etc/openvpn/server.conf:
   file.managed:
-    - source: salt://openvpn/files/server.conf
-    - template: jinja
-    - mode: 600
-    - require:
-      - pkg: openvpn_packages
-    - watch_in:
-      - service: openvpn_service
+  - source: salt://openvpn/files/server.conf
+  - template: jinja
+  - mode: 600
+  - require:
+    - pkg: openvpn_packages
+  - watch_in:
+    - service: openvpn_service
 
-/etc/default/openvpn:
+/etc/openvpn/ipp.txt:
   file.managed:
-    - source: salt://openvpn/files/default
-    - template: jinja
-    - mode: 600
-    - require:
-      - pkg: openvpn_packages
+  - source: salt://openvpn/files/ipp.txt
+  - template: jinja
+  - mode: 600
+  - require:
+    - pkg: openvpn_packages
+  - require_in:
+    - service: openvpn_service
 
 /etc/openvpn/ssl/server.crt:
   file.managed:
   - source: salt://pki/{{ server.ssl.authority }}/certs/{{ server.ssl.certificate }}.cert.pem
   - require:
     - file: openvpn_ssl_dir
+  - require_in:
+    - service: openvpn_service
 
 /etc/openvpn/ssl/server.key:
   file.managed:
   - source: salt://pki/{{ server.ssl.authority }}/certs/{{ server.ssl.certificate }}.key.pem
   - require:
     - file: openvpn_ssl_dir
+  - require_in:
+    - service: openvpn_service
 
 /etc/openvpn/ssl/ca.crt:
   file.managed:
   - source: salt://pki/{{ server.ssl.authority }}/{{ server.ssl.authority }}-chain.cert.pem
   - require:
     - file: openvpn_ssl_dir
+  - require_in:
+    - service: openvpn_service
 
 dh_key_install:
   cmd.run:
@@ -51,5 +59,7 @@ dh_key_install:
   - unless: test -e /etc/openvpn/ssl/dh2048.pem
   - require:
     - file: openvpn_ssl_dir
+  - require_in:
+    - service: openvpn_service
 
 {%- endif %}
