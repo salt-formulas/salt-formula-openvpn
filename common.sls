@@ -10,7 +10,20 @@ openvpn_ssl_dir:
   - require:
     - pkg: openvpn_packages
 
+{%- if grains.os_family == "Arch" %}
+
+{%- for tunnel_name, tunnel in client.tunnel.iteritems() %}
+
+openvpn_service:
+  service.running:
+  - name: "{{ tunel_name }}.service"
+  - enable: true
+
+{%- endfor %}
+
+{%- else %}
 openvpn_service:
   service.running:
   - name: {{ common.service }}
   - enable: true
+{%- endif %}
