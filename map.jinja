@@ -9,6 +9,11 @@
         'service': 'openvpn',
         'config_dir': '/etc/openvpn',
     },
+    'Arch': {
+        'pkgs': ['openvpn'],
+        'service': 'openvpn',
+        'config_dir': '/etc/openvpn',
+    },
 }, merge=salt['pillar.get']('openvpn')) %}
 
 {% set client = salt['grains.filter_by']({
@@ -18,6 +23,9 @@
     'RedHat': {
         'service_enabled': True,
     },
+    'Arch': {
+        'service_enabled': True,
+    },
 }, merge=salt['pillar.get']('openvpn:client')) %}
 
 {% set server = salt['grains.filter_by']({
@@ -25,6 +33,9 @@
         'service_enabled': True,
     },
     'RedHat': {
+        'service_enabled': True,
+    },
+    'Arch': {
         'service_enabled': True,
     },
 }, merge=salt['pillar.get']('openvpn:server')) %}
