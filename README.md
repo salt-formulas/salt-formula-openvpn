@@ -10,7 +10,7 @@ Simple OpenVPN server
     openvpn:
       server:
         enabled: true
-        device: tup
+        device: tun
         ssl:
           authority: Domain_Service_CA
           certificate: server.domain.com
@@ -36,6 +36,48 @@ OpenVPN server with private subnet with DHCP and predefined clients
             address: 10.0.8.12
           - name: client2.domain.com
             address: 10.0.8.13
+
+    openvpn:
+      server:
+        ...
+        topology: subnet
+        interface:
+          network: 10.0.8.0
+          netmask: 255.255.255.0
+        dhcp_pool:
+          start: 10.0.8.100
+          end: 10.0.8.199
+
+        topology: gateway
+        device: tun
+        mode: p2p
+        interface:
+          network: 10.0.8.0
+          netmask: 255.255.255.0
+        endpoint:
+          local: 10.8.0.1
+          remote: 10.8.0.2
+        dhcp_pool:
+          start: 10.8.0.4
+          end: 10.8.0.255
+        routes:
+        - network: 10.8.0.1
+          netmask: 255.255.255.255
+        - network: 10.0.110.0
+          netmask: 255.255.255.0
+        - network: 10.0.101.0
+          netmask: 255.255.255.0
+        - network: 10.0.102.0
+          netmask: 255.255.255.0
+        - network: 10.0.103.0
+          netmask: 255.255.255.0
+        - network: 10.0.106.0
+          netmask: 255.255.255.0
+        - network: 10.0.107.0
+          netmask: 255.255.255.0
+        - network: 10.10.0.0
+          netmask: 255.255.0.0
+
 
 
 Simple OpenVPN client with multiple servers
