@@ -1,0 +1,6 @@
+applications:
+- openvpn
+parameters:
+  openvpn:
+    client:
+      enabled: true
