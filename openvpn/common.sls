@@ -12,6 +12,10 @@ openvpn_ssl_dir:
 
 {%- if grains.os_family == "Arch" %}
 
+{%- if pillar.openvpn.client is defined %}
+
+{% from "openvpn/map.jinja" import client with context %}
+
 {%- for tunnel_name, tunnel in client.tunnel.iteritems() %}
 
 openvpn_service:
@@ -21,9 +25,13 @@ openvpn_service:
 
 {%- endfor %}
 
+{%- endif %}
+
 {%- else %}
+
 openvpn_service:
   service.running:
   - name: {{ common.service }}
   - enable: true
+
 {%- endif %}
