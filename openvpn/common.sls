@@ -20,7 +20,7 @@ openvpn_ssl_dir:
 
 openvpn_service:
   service.running:
-  - name: "{{ tunel_name }}.service"
+  - name: "{{ tunnel_name }}.service"
   - enable: true
 
 {%- endfor %}
