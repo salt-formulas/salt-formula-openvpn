@@ -35,7 +35,7 @@
 {% set server = salt['grains.filter_by']({
     'Debian': {
         'service_enabled': True,
-         'pkipath': 'pki'
+        'pkipath': 'pki'
     },
     'RedHat': {
         'service_enabled': True,

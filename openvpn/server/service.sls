@@ -30,7 +30,7 @@ net.ipv4.ip_forward:
 
 /etc/openvpn/ssl/server.crt:
   file.managed:
-  - source: salt://pki/{{ server.ssl.authority }}/certs/{{ server.ssl.certificate }}.cert.pem
+  - source: salt://{{ server.pkipath }}/{{ server.ssl.authority }}/certs/{{ server.ssl.certificate }}.cert.pem
   - require:
     - file: openvpn_ssl_dir
   - require_in:
@@ -38,7 +38,7 @@ net.ipv4.ip_forward:
 
 /etc/openvpn/ssl/server.key:
   file.managed:
-  - source: salt://pki/{{ server.ssl.authority }}/certs/{{ server.ssl.certificate }}.key.pem
+  - source: salt://{{ server.pkipath }}/{{ server.ssl.authority }}/certs/{{ server.ssl.certificate }}.key.pem
   - require:
     - file: openvpn_ssl_dir
   - require_in:
@@ -46,7 +46,7 @@ net.ipv4.ip_forward:
 
 /etc/openvpn/ssl/ca.crt:
   file.managed:
-  - source: salt://pki/{{ server.ssl.authority }}/{{ server.ssl.authority }}-chain.cert.pem
+  - source: salt://{{ server.pkipath }}/{{ server.ssl.authority }}/{{ server.ssl.authority }}-chain.cert.pem
   - require:
     - file: openvpn_ssl_dir
   - require_in:
