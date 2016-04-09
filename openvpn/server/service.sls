@@ -28,12 +28,14 @@ net.ipv4.ip_forward:
   - require_in:
     - service: openvpn_service
 
+{%- if tunnel.ssl.get('engine', 'default') == 'default' %}
+
 /etc/openvpn/ssl/server.crt:
   file.managed:
   - source: salt://{{ server.pkipath }}/{{ server.ssl.authority }}/certs/{{ server.ssl.certificate }}.cert.pem
   - require:
     - file: openvpn_ssl_dir
-  - require_in:
+  - watch_in:
     - service: openvpn_service
 
 /etc/openvpn/ssl/server.key:
@@ -41,7 +43,7 @@ net.ipv4.ip_forward:
   - source: salt://{{ server.pkipath }}/{{ server.ssl.authority }}/certs/{{ server.ssl.certificate }}.key.pem
   - require:
     - file: openvpn_ssl_dir
-  - require_in:
+  - watch_in:
     - service: openvpn_service
 
 /etc/openvpn/ssl/ca.crt:
@@ -49,17 +51,18 @@ net.ipv4.ip_forward:
   - source: salt://{{ server.pkipath }}/{{ server.ssl.authority }}/{{ server.ssl.authority }}-chain.cert.pem
   - require:
     - file: openvpn_ssl_dir
-  - require_in:
+  - watch_in:
     - service: openvpn_service
 
-dh_key_install:
+{%- endif %}
+
+openvpn_generate_dhparams:
   cmd.run:
-  - name: openssl dhparam -out dh2048.pem 2048
-  - cwd: /etc/openvpn/ssl
-  - unless: test -e /etc/openvpn/ssl/dh2048.pem
+  - name: openssl dhparam -out /etc/ssl/dhparams.pem 2048
+  - creates: /etc/ssl/dhparams.pem
   - require:
-    - file: openvpn_ssl_dir
-  - require_in:
+    - pkg: nginx_packages
+  - watch_in:
     - service: openvpn_service
 
 {%- endif %}

@@ -28,6 +28,8 @@ include:
     - watch_in:
       - service: openvpn_service
 
+{%- if tunnel.ssl.get('engine', 'default') == 'default' %}
+
 /etc/openvpn/ssl/{{ tunnel.ssl.authority }}_{{ tunnel.ssl.certificate }}.crt:
   file.managed:
   - source: salt://pki/{{ tunnel.ssl.authority }}/certs/{{ tunnel.ssl.certificate }}.cert.pem
@@ -51,6 +53,8 @@ include:
     - file: openvpn_ssl_dir
   - require_in:
     - service: openvpn_service
+
+{%- endif %}
 
 {%- endfor %}
 
