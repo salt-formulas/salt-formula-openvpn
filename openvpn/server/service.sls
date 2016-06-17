@@ -25,43 +25,38 @@ net.ipv4.ip_forward:
   - mode: 600
   - require:
     - pkg: openvpn_packages
-  - require_in:
+    - watch_in:
     - service: openvpn_service
 
-{%- if tunnel.ssl.get('engine', 'default') == 'default' %}
-
-/etc/openvpn/ssl/server.crt:
-  file.managed:
-  - source: salt://{{ server.pkipath }}/{{ server.ssl.authority }}/certs/{{ server.ssl.certificate }}.cert.pem
-  - require:
-    - file: openvpn_ssl_dir
-  - watch_in:
-    - service: openvpn_service
-
+{%- if server.ssl.get('key') %}
 /etc/openvpn/ssl/server.key:
   file.managed:
-  - source: salt://{{ server.pkipath }}/{{ server.ssl.authority }}/certs/{{ server.ssl.certificate }}.key.pem
-  - require:
-    - file: openvpn_ssl_dir
-  - watch_in:
-    - service: openvpn_service
+    - contents_pillar: openvpn:server:ssl:key
+    - mode: 600
+    - watch_in:
+      - service: openvpn_service
+{%- endif %}
 
+{%- if server.ssl.get('cert') %}
+/etc/openvpn/ssl/server.crt:
+  file.managed:
+    - contents_pillar: openvpn:server:ssl:cert
+    - watch_in:
+      - service: openvpn_service
+{%- endif %}
+
+{%- if server.ssl.get('ca') %}
 /etc/openvpn/ssl/ca.crt:
   file.managed:
-  - source: salt://{{ server.pkipath }}/{{ server.ssl.authority }}/{{ server.ssl.authority }}-chain.cert.pem
-  - require:
-    - file: openvpn_ssl_dir
-  - watch_in:
-    - service: openvpn_service
-
+    - contents_pillar: openvpn:server:ssl:ca
+    - watch_in:
+      - service: openvpn_service
 {%- endif %}
 
 openvpn_generate_dhparams:
   cmd.run:
   - name: openssl dhparam -out /etc/ssl/dhparams.pem 2048
-  - creates: /etc/ssl/dhparams.pem
-  - require:
-    - pkg: nginx_packages
+  - creates: /etc/openvpn/ssl/dh2048.pem
   - watch_in:
     - service: openvpn_service
 
