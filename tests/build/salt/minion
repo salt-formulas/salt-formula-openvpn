@@ -1,0 +1,14 @@
+file_client: local
+cachedir: /srv/tests/build/salt/cache
+verify_env: False
+
+file_roots:
+  base:
+  - /srv/tests/build/file_root
+  - /srv/tests/..
+  - /usr/share/salt-formulas/env
+
+pillar_roots:
+  base:
+  - /srv/tests/build/pillar_root
+  - /srv/tests/pillar

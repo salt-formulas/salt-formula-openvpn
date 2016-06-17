@@ -1,0 +1,3 @@
+logrotate:
+  server:
+    enabled: true
