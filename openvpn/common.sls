@@ -31,7 +31,11 @@ openvpn_service:
 
 openvpn_service:
   service.running:
+  {%- if grains.get('init', None) == 'systemd' %}
+  - name: {{ common.service }}@server
+  {%- else %}
   - name: {{ common.service }}
+  {%- endif %}
   - enable: true
 
 {%- endif %}

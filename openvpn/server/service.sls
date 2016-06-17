@@ -25,7 +25,7 @@ net.ipv4.ip_forward:
   - mode: 600
   - require:
     - pkg: openvpn_packages
-    - watch_in:
+  - watch_in:
     - service: openvpn_service
 
 {%- if server.ssl.get('key') %}
@@ -55,9 +55,20 @@ net.ipv4.ip_forward:
 
 openvpn_generate_dhparams:
   cmd.run:
-  - name: openssl dhparam -out /etc/ssl/dhparams.pem 2048
+  - name: openssl dhparam -out /etc/openvpn/ssl/dh2048.pem 2048
   - creates: /etc/openvpn/ssl/dh2048.pem
   - watch_in:
     - service: openvpn_service
+
+{%- if server.auth is defined %}
+{%- if server.auth.type == 'pam' %}
+openvpn_auth_pam:
+  file.symlink:
+    - name: /etc/pam.d/openvpn
+    - target: /etc/pam.d/common-auth
+    - watch_in:
+      - service: openvpn_service
+{%- endif %}
+{%- endif %}
 
 {%- endif %}
