@@ -1,3 +1,0 @@
-base:
-  server:
-    - server
