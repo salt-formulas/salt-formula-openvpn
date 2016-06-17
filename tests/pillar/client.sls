@@ -1,3 +1,0 @@
-logrotate:
-  client:
-    enabled: true
