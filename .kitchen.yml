@@ -1,0 +1,53 @@
+---
+driver:
+  name: docker
+  hostname: openvpn.ci.local
+  use_sudo: false
+
+provisioner:
+  name: salt_solo
+  salt_install: bootstrap
+  salt_bootstrap_url: https://bootstrap.saltstack.com
+  salt_version: latest
+  require_chef: false
+  log_level: error
+  formula: openvpn
+  grains:
+    noservices: True
+  state_top:
+    base:
+      "*":
+        - openvpn
+  pillars:
+    top.sls:
+      base:
+        "*":
+          - openvpn
+
+verifier:
+  name: inspec
+  sudo: true
+
+platforms:
+  - name: <%=ENV['PLATFORM'] || 'ubuntu-xenial'%>
+    driver_config:
+      image: <%=ENV['PLATFORM'] || 'trevorj/salty-whales:xenial'%>
+      platform: ubuntu
+
+suites:
+
+  - name: server
+    provisioner:
+      pillars-from-files:
+        openvpn.sls: tests/pillar/server.sls
+
+  - name: client
+    provisioner:
+      pillars-from-files:
+        openvpn.sls: tests/pillar/client.sls
+
+  - name: multiclient
+    provisioner:
+      pillars-from-files:
+        openvpn.sls: tests/pillar/multi_client.sls
+# vim: ft=yaml sw=2 ts=2 sts=2 tw=125

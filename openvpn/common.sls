@@ -10,6 +10,8 @@ openvpn_ssl_dir:
   - require:
     - pkg: openvpn_packages
 
+{%- if not grains.get('noservices', False) %}
+
 {%- if grains.os_family == "Arch" %}
 
 {%- if pillar.openvpn.client is defined %}
@@ -37,5 +39,7 @@ openvpn_service:
   - name: {{ common.service }}
   {%- endif %}
   - enable: true
+
+{%- endif %}
 
 {%- endif %}
