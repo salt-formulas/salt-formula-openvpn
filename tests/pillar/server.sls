@@ -2,6 +2,8 @@ openvpn:
   server:
     enabled: true
     bind:
+      address: 0.0.0.0
+      port: 1194
       protocol: tcp
     ssl:
       ca_file: /etc/openvpn/ssl/ca.crt

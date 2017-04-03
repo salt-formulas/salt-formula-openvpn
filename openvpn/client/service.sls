@@ -11,8 +11,10 @@ include:
   - mode: 600
   - require:
     - pkg: openvpn_packages
+  {%- if not grains.get('noservices', False) %}
   - watch_in:
     - service: openvpn_service
+  {%- endif %}
 
 {%- for tunnel_name, tunnel in client.tunnel.iteritems() %}
 
@@ -25,8 +27,10 @@ include:
       tunnel_name: '{{ tunnel_name }}'
     - require:
       - pkg: openvpn_packages
+    {%- if not grains.get('noservices', False) %}
     - watch_in:
       - service: openvpn_service
+    {%- endif %}
 
 {%- if tunnel.ssl.get('engine', 'default') == 'default' %}
 
@@ -35,24 +39,30 @@ include:
   - source: salt://pki/{{ tunnel.ssl.authority }}/certs/{{ tunnel.ssl.certificate }}.cert.pem
   - require:
     - file: openvpn_ssl_dir
+  {%- if not grains.get('noservices', False) %}
   - require_in:
     - service: openvpn_service
+  {%- endif %}
 
 /etc/openvpn/ssl/{{ tunnel.ssl.authority }}_{{ tunnel.ssl.certificate }}.key:
   file.managed:
   - source: salt://pki/{{ tunnel.ssl.authority }}/certs/{{ tunnel.ssl.certificate }}.key.pem
   - require:
     - file: openvpn_ssl_dir
+  {%- if not grains.get('noservices', False) %}
   - require_in:
     - service: openvpn_service
+  {%- endif %}
 
 /etc/openvpn/ssl/{{ tunnel.ssl.authority }}.crt:
   file.managed:
   - source: salt://pki/{{ tunnel.ssl.authority }}/{{ tunnel.ssl.authority }}-chain.cert.pem
   - require:
     - file: openvpn_ssl_dir
+  {%- if not grains.get('noservices', False) %}
   - require_in:
     - service: openvpn_service
+  {%- endif %}
 
 {%- endif %}
 
