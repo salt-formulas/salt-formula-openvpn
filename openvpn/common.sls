@@ -10,7 +10,7 @@ openvpn_ssl_dir:
   - require:
     - pkg: openvpn_packages
 
-{%- if not grains.get('noservices', False) %}
+
 
 {%- if grains.os_family == "Arch" %}
 
@@ -24,7 +24,10 @@ openvpn_service:
   service.running:
   - name: "{{ tunnel_name }}.service"
   - enable: true
-
+  {% if grains.noservices is defined %}
+  - onlyif: {% if grains.get('noservices', "True") %}"True"{% else %}False{% endif %}
+  {% endif %}
+  
 {%- endfor %}
 
 {%- endif %}
@@ -39,7 +42,9 @@ openvpn_service:
   - name: {{ common.service }}
   {%- endif %}
   - enable: true
+  {% if grains.noservices is defined %}
+  - onlyif: {% if grains.get('noservices', "True") %}"True"{% else %}False{% endif %}
+  {% endif %}
 
-{%- endif %}
 
 {%- endif %}
