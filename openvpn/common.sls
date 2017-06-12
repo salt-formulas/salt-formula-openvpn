@@ -24,9 +24,9 @@ openvpn_service:
   service.running:
   - name: "{{ tunnel_name }}.service"
   - enable: true
-  {% if grains.noservices is defined %}
-  - onlyif: {% if grains.get('noservices', "True") %}"True"{% else %}False{% endif %}
-  {% endif %}
+  {%- if grains.get('noservices') %}
+  - onlyif: /bin/false
+  {%- endif %}
   
 {%- endfor %}
 
@@ -42,9 +42,9 @@ openvpn_service:
   - name: {{ common.service }}
   {%- endif %}
   - enable: true
-  {% if grains.noservices is defined %}
-  - onlyif: {% if grains.get('noservices', "True") %}"True"{% else %}False{% endif %}
-  {% endif %}
+  {%- if grains.get('noservices') %}
+  - onlyif: /bin/false
+  {%- endif %}
 
 
 {%- endif %}
