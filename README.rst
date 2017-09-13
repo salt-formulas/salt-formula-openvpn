@@ -76,6 +76,24 @@ OpenVPN server with private subnet with DHCP and predefined clients
         - network: 10.0.101.0
           netmask: 255.255.255.0
 
+
+OpenVPN server with custom auth
+
+.. code-block:: yaml
+
+    openvpn:
+      server:
+        ...
+        interface:
+          topology: subnet
+          network: 10.0.8.0
+          netmask: 255.255.255.0
+        auth:
+          engine: pam/google-authenticator
+        ssl:
+          authority: Domain_Service_CA
+          certificate: server.domain.com
+
 Single OpenVPN client with multiple servers
 
 .. code-block:: yaml
@@ -126,6 +144,22 @@ Multiple OpenVPN clients
             protocol: tcp
             device: tup
             compression: true
+            ssl:
+              engine: salt
+              authority: Domain_Service_CA
+              certificate: client.domain.com
+
+OpenVPN client auth
+
+.. code-block:: yaml
+
+    openvpn:
+      client:
+        enabled: true
+        tunnel:
+          tunnel01:
+            auth:
+              engine: pam/google-authenticator
             ssl:
               engine: salt
               authority: Domain_Service_CA
