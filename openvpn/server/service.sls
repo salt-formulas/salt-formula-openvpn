@@ -65,13 +65,37 @@ openvpn_generate_dhparams:
     - service: openvpn_service
 
 {%- if server.auth is defined %}
-{%- if server.auth.type == 'pam' %}
+{%- if server.auth.engine == 'pam' %}
 openvpn_auth_pam:
   file.symlink:
     - name: /etc/pam.d/openvpn
     - target: /etc/pam.d/common-auth
     - watch_in:
       - service: openvpn_service
+{%- endif %}
+{%- if server.auth.engine == 'google-authenticator' %}
+openvpn_auth_packages:
+  pkg.installed:
+  - name: libpam-google-authenticator
+
+openvpn_auth_pam:
+  file.copy:
+    - name: /etc/pam.d/openvpn
+    - source: /etc/pam.d/common-auth
+    - watch_in:
+      - service: openvpn_service
+    - require:
+      - pkg: openvpn_auth_packages
+
+openvpn_auth_google_pam:
+  file.append:
+    - name: /etc/pam.d/openvpn
+    - text: auth    required                        pam_google_authenticator.so
+    - ignore_whitespace: False
+    - watch_in:
+      - service: openvpn_service
+    - require:
+      - file: openvpn_auth_pam
 {%- endif %}
 {%- endif %}
 

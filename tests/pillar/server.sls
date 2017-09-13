@@ -16,4 +16,4 @@ openvpn:
       network: 10.0.101.0
       netmask: 255.255.255.0
     auth:
-      type: pam
+      engine: pam
