@@ -171,7 +171,7 @@ Read more
 
 * https://github.com/luxflux/puppet-openvpn
 * https://github.com/ConsumerAffairs/salt-states/blob/master/openvpn.sls
-* https://help.ubuntu.com/13.10/serverguide/openvpn.html
+* https://help.ubuntu.com/lts/serverguide/openvpn.html
 
 Documentation and Bugs
 ======================
