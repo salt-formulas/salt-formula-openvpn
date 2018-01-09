@@ -13,6 +13,6 @@ Vcs-Git: https://github.com/tcpcloud/salt-formula-openvpn.git
 
 Package: salt-formula-openvpn
 Architecture: all
-Depends: ${misc:Depends}, salt-master, reclass
+Depends: ${misc:Depends}
 Description: openvpn Salt formula
  Install and configure openvpn server and relay.
