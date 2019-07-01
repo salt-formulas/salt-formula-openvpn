@@ -9,6 +9,11 @@
         'service': 'openvpn',
         'config_dir': '/etc/openvpn',
     },
+    'Suse': {
+        'pkgs': ['openvpn'],
+        'service': 'openvpn',
+        'config_dir': '/etc/openvpn',
+    },
     'Arch': {
         'pkgs': ['openvpn'],
         'service': 'openvpn',
@@ -26,6 +31,10 @@
         'service_enabled': True,
         'tunnel': {},
     },
+    'Suse': {
+        'service_enabled': True,
+        'tunnel': {},
+    },
     'Arch': {
         'service_enabled': True,
         'tunnel': {},
@@ -38,6 +47,9 @@
         'pkipath': 'pki'
     },
     'RedHat': {
+        'service_enabled': True,
+    },
+    'Suse': {
         'service_enabled': True,
     },
     'Arch': {
